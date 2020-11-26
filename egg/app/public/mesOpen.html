@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理书籍</title>
+    <script src="https://s3.pstatp.com/cdn/expire-1-M/axios/0.19.2/axios.js" type="application/javascript"></script>
+    <style>
+        .box{
+            position: absolute;
+            left: 590px;
+            top: 130px;
+            width: 420px;
+            height: 350px;
+            background-color: rgb(149, 175, 149);
+        }
+        .b{
+            width: 310px;
+            height: 30px;
+            margin-top: 5px;
+        }
+        .b5{
+            height: 120px;
+        }
+        .back{
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url(./img/dxh/02.jpg);
+        }
+        #upload{
+            position: absolute;
+            left: 60%;
+            bottom: 10px;
+            width: 80px;
+            height: 30px;
+            cursor: pointer;
+        }
+        #nowDelete{
+            position: absolute;
+            left: 30%;
+            bottom: 10px;
+            width: 80px;
+            height: 30px;
+            cursor: pointer;
+        }
+        .top{
+            position: absolute;
+            top: 50px;
+            left: 35%;
+        }
+        .search{
+            padding-left: 10px;
+            width: 450px;
+            height: 50px;
+            outline: none;
+            color: grey;
+        }
+        .wsearch{
+            display: inline-block;
+            position: absolute;
+            width: 54px;
+            height: 54px;
+            text-align: center;
+            line-height: 54px;
+            cursor: pointer;
+            border: 1px solid #000;
+            border-left: none;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="back"></div>
+    <div class="top">
+        <input type="text" class="search" name="search" value="请输入要查找的商品编码"><span class="wsearch" onclick="wsearch()">查找</span>
+    </div>
+    <div class="box">
+        <span class="a1">产品名称:</span>
+        <input class="b b1" type="text"></br>
+        <span class="a2">产品种类:</span>
+        <input class="b b2" type="text"></br>
+        <span class="a3">零售价格:</span>
+        <input class="b b3" type="text"></br>
+        <span class="a4">商品编码:</span>
+        <input class="b b4" type="text"></br>
+        <span class="a5">产品描述:</span>
+        <input class="b b5" type="text"></br>
+        <button id="nowDelete" onclick="del()">删除</button>
+        <button id="upload" onclick="upload()">上传</button>
+    </div>
+
+    <script>
+        let b1 = document.querySelector(".b1");
+        let b2 = document.querySelector(".b2");
+        let b3 = document.querySelector(".b3");
+        let b4 = document.querySelector(".b4");
+        let b5 = document.querySelector(".b5");
+        
+        function del(){
+            var sure = confirm("是否要删除这个产品？")
+            if(sure){
+                axios(`/mes_del?goodsID=${b4.value}`)
+                .then((res)=>{
+                    b1.value = null;
+                    b2.value = null;
+                    b3.value = null;
+                    b4.value = null;
+                    b5.value = null;
+                    if(res.data.code==2002){
+                        search.value = null;
+                        alert(`${res.data.info}已成功从您的库中删除`)
+                    }
+                    else if(res.data.code==4003){
+                        alert("错误的操作！")
+                    }
+                })
+            }
+        }
+
+        function upload(){
+            var goodsName = b1.value;
+            var goodsKind = b2.value;
+            var goodsPrice = b3.value;
+            var goodsID = b4.value;
+            var goodsDesc = b5.value;
+            var formdata = new FormData();
+            formdata.append("goodsName",goodsName);
+            formdata.append("goodsKind",goodsKind);
+            formdata.append("goodsPrice",goodsPrice);
+            formdata.append("goodsID",goodsID);
+            formdata.append("goodsDesc",goodsDesc);
+
+            axios.post("/mes_change",formdata)
+            .then((res)=>{
+                if(res.data.code==2002){
+                    alert("修改成功");
+                }else if(res.data.code==4003){
+                    alert("错误的操作")
+                }
+            })
+        }
+    </script>
+    <script>
+        let search = document.querySelector(".search");
+        search.onfocus = function(){
+            search.value = null;
+            search.style.color = "black";
+        }
+        function wsearch(){
+            axios(`/mes_search?goodsID=${search.value}`)
+            .then((res)=>{
+                if(res.data.code==2003){
+                    b1.value = res.data.re.goodsName;
+                    b2.value = res.data.re.goodsKind;
+                    b3.value = res.data.re.goodsPrice;
+                    b4.value = res.data.re.goodsID;
+                    b5.value = res.data.re.goodsDesc;
+                }else if(res.data.code==4003){
+                    alert("库中没有这个产品，请重试！")
+                }
+            })
+        }
+    </script>
+</body>
+</html>
