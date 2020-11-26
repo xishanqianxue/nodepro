@@ -24,7 +24,7 @@ module.exports = appInfo => {
       //密码
       password:"root",
       //数据库名
-      database:"sql_firstday"   
+      database:"nodepro"   
     }
   }
   // use for cookie sign key, should change to your own and keep security
