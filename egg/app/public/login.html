@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://s3.pstatp.com/cdn/expire-1-M/axios/0.19.2/axios.js" type="application/javascript"></script>
+</head>
+<body>
+    <input type="text" id="username"><br> 
+    <input type="password" id="pwd"><br>
+    <input type="text" id="Verif"><span class="verif"></span><br>
+    <button id="btn">登录</button>
+
+    <script>
+        var btn = document.getElementById("btn");
+        // var verif = document.getElementById("verif");
+        axios.get("/verif")
+        .then((res)=>{
+            verif.innerHTML = res.data;
+        })
+        btn.onclick = function(){
+            var username = document.getElementById("username").value;
+            var pwd = document.getElementById("password").value;
+            var verif = document.getElementById("verif").value;
+            var formdata = new FormData();
+
+            formdata.append("username",username);
+            formdata.append("pwd",pwd);
+            formdata.append("verif",verif);
+            
+            axios.post()
+        }
+    </script>
+</body>
+</html>
