@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索内容</title>
+    <script src="https://s0.pstatp.com/cdn/expire-1-M/axios/0.19.2/axios.js" type="application/javascript"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        a{
+            text-decoration: none;
+            color: #777;
+        }
+        a:hover{
+            color: #333;
+        }
+        .nav{
+            position: relative;
+            top: 0;
+            width: 100%;
+            height: 50px;
+            color: #777;
+            background-color: #ccc;
+        }
+        #logo{
+            position: absolute;
+            left: 80px;
+            height: 45px;
+            cursor: pointer;
+        }
+        .right-nav{
+            float: right;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 20%;
+            height: 50px;
+        }
+        .searchbox{
+            position: relative;
+            width: 600px;
+            top: 60px;
+            left: 30%;
+        }
+        #search{
+            padding-left: 15px;
+            width: 500px;
+            height: 50px;
+            outline: none;
+        }
+        .wsearch{
+            display: inline-block;
+            position: absolute;
+            border: 1px solid black;
+            border-left: none;
+            width: 100px;
+            height: 52px;
+            line-height: 50px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .jiansuo{
+            position: relative;
+            top: 120px;
+            left: 5%;
+            width: 90%;
+            height: auto;
+        }
+        .jiansuot{
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            border-top: 1px solid #999;
+        }
+        #isfree{
+            border-bottom: 1px solid #999;
+        }
+        .jiansuom{
+            display: inline-block;
+            width: 150px;
+            height: 50px;
+            background-color: #ccc;
+            padding-left: 20px;
+            font-weight: 700;
+        }
+        .jiansuo1{
+            display: inline-block;
+            width: 70px;
+            margin-left: 40px;
+            cursor: pointer;
+        }
+        .jiansuo1:hover{
+            color: red;
+        }
+        .main{
+            position: relative;
+            top: 140px;
+            left: 5%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            border: 1px solid black;
+            width: 90%;
+            height: auto;
+            background-color: #ddd;
+        }
+        .items{
+            margin: 30px 0 0 35px;
+            width: 230px;
+            height: 300px;
+            border: 1px solid black;
+        }
+        .itemsimg{
+            margin: 20px 0 10px 25px;
+            width: 180px;
+            height: 200px;
+            border: 1px solid black;
+        }
+        .price{
+            position: relative;
+            left: 20px;
+            margin-bottom: 5px;
+            color: red;
+        }
+        .itemsname{
+            position: relative;
+            left: 15px;
+            color: black;
+        }
+        .itemsname:hover{
+            color: red;
+        }
+        .error1{
+            color: #777;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <img src="./img/dxh/06.png" alt="加载图片失败" id="logo">
+        <div class="right-nav">
+            <a href="#" id="login">请登录</a>
+            <a href="#" id="history">我的订单</a>
+            <a href="#" id="messager" onclick="meslogin()">管理员登录</a>
+        </div>
+    </div>
+    <div class="searchbox">
+        <input type="text" id="search"><span class="wsearch" onclick="wesearch()">搜索</span>
+    </div>
+    <div class="jiansuo">
+        <div id="kind" class="jiansuot">
+            <span class="jiansuom">种类:</span>
+            <span class="jiansuo1">全部</span>
+            <span class="jiansuo1">古典名著</span>
+            <span class="jiansuo1">流行小说</span>
+            <span class="jiansuo1">其他</span>
+        </div>
+        <div id="isdone" class="jiansuot">
+            <span class="jiansuom">连载状态:</span>
+            <span class="jiansuo1">全部</span>
+            <span class="jiansuo1">完结</span>
+            <span class="jiansuo1">连载</span>
+        </div> 
+        <div id="isfree" class="jiansuot">
+            <span class="jiansuom">收费:</span>
+            <span class="jiansuo1">全部</span>
+            <span class="jiansuo1">免费</span>
+            <span class="jiansuo1">收费</span>
+            <span class="jiansuo1">会员</span>
+        </div>
+    </div>
+    <div class="main">
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+    </div>
+    <script>
+        var leibie = [,,];
+        function meslogin(){
+            window.location.href = "http://192.168.2.125:7001/public/messager.html"
+        }
+        function wesearch(){
+            var search = document.getElementById("search");
+            var main = document.querySelector(".main");
+            var goodsName = search.value;
+            if(!goodsName){
+                alert("请输入搜索内容！")
+                return
+            }
+
+            main.innerHTML = null;
+            axios.get(`/search_search?goodsName=${goodsName}`)
+            .then((res)=>{
+                if(res.data.code==2003){
+                    console.log(res.data.re);
+                    let num = res.data.re.length;
+                    console.log(num);
+                    for(let i=0;i<num;i++){
+                        let items= document.createElement("div");
+                        items.className = "items";
+
+                        let img = document.createElement("img");
+                        img.className = "itemsimg";
+                        img.src = res.data.re[i].goodsImg;
+                        items.appendChild(img);
+
+                        let price = document.createElement("p");
+                        price.className = "price";
+                        price.innerHTML = res.data.re[i].goodsPrice;
+                        items.appendChild(price);
+
+                        let name = document.createElement("a");
+                        name.className = "itemsname";
+                        name.href = "#";
+                        name.innerHTML = `【${res.data.re[i].goodsName}】`
+                        items.appendChild(name);
+
+                        main.appendChild(items);
+                    }
+                    
+                }
+                else if(res.data.code==4003){
+                    main.innerHTML = null;
+                    let error1 = document.createElement("h1");
+                    error1.className="error1";
+                    error1.innerHTML = "没有找到相关结果"
+                    main.appendChild(error1);
+                }
+                
+            })
+        }
+    </script>
+</body>
+</html>
