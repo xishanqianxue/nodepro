@@ -1,0 +1,119 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录界面</title>
+    <!-- <script src='https://unpkg.com/axios/dist/axios.min.js'></script> -->
+    <script src='https://s1.pstatp.com/cdn/expire-1-M/axios/0.19.2/axios.js'></script>
+    <style>
+        #img {
+            cursor: pointer;
+        }
+        body{
+            background-image: url(./img/xhc/dl.jpg);
+            z-index: 100;
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+        .info{
+            width: 300px;
+            height: 400px;
+            background-image: url(./img/xhc/lbj.jpg);
+            margin: auto;
+            opacity:0.6;
+            z-index: 101;
+
+        }
+        .Zhuce {
+            margin-left: 128px;
+        }
+        .left span {
+            display: block;
+            text-align: right;
+            height: 20px;
+            margin-top: 20px;
+        }
+
+        .left {
+            width: 30%;
+            float: left;
+        }
+        
+        .right {
+            width: 70%;
+            float: right;
+        }
+
+        input {
+            height: 30px;
+            margin-top: 15px;
+        }
+
+        .denglu {
+            width: 50px;
+            height: 40px;
+            border-radius: 4px;
+            margin-left: 40px;
+            margin-top: 40px;
+            display: block;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="info">
+        <h3 class="Zhuce">登录</h3>
+        <div class="left">
+            <span>账号:</span>
+            <span>密码:</span>
+            <span>验证码:</span>
+        </div>
+        <div class="right">
+            <input type="text" name="accountnumber" id="accountnumber" value=""><br>
+            <input type="text" name="password" id="password" value=""><br>
+            <input type="text" name="verif" id="verif"><span id="img"></span> <br>
+            <button onclick="fn()"class="denglu">登录</button>
+        </div><br>
+        <script>
+            //1.请求验证码
+            var img=document.querySelector("#img")
+            function getVerif() {
+                axios("/getVerifxhc")
+                    .then((res) => {
+                        console.log(res.data)
+                        img.innerHTML = res.data
+                    })
+            }
+            getVerif() 
+             img.onclick = function () {
+                getVerif()
+            }
+            function fn() {
+                var accountnumber = document.getElementById("accountnumber").value
+                var password = document.getElementById("password").value
+                var verif = document.getElementById("verif").value
+//发起请求
+                axios.post("/loginxhc", { accountnumber, password, verif })
+                    .then((res) => {
+                        console.log(res.data)
+                        if (res.data.code == 4002) {
+                            alert("验证码错误")
+                        }
+                        else if (res.data.code == 4003) {
+                //账号或者密码错误
+                            alert("账号或者密码错误")
+                        } else if (res.data.code == 2002) {
+                            window.location.href = "http://192.168.2.219:7001/public/search.html"//应该跳转首页的
+
+                        }
+                    })
+
+
+            }
+
+        </script>
+</body>
+
+</html>

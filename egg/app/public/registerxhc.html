@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src='https://s1.pstatp.com/cdn/expire-1-M/axios/0.19.2/axios.js'></script>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        body{
+            background-image:url(./img/xhc/zc.jpg) ;
+            z-index: 100;
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+        .info {
+            width: 300px;
+            height: 400px;
+            z-index: 101;
+            opacity:0.6;
+            background-image: url(./img/xhc/rbj.jpg);
+            margin: auto;
+        }
+
+        .Zhuce {
+            margin-left: 128px;
+        }
+
+        .left span {
+            display: block;
+            text-align: right;
+            height: 20px;
+            margin-top: 20px;
+        }
+
+        .left {
+            width: 30%;
+            float: left;
+        }
+
+        .right {
+            width: 70%;
+            float: right;
+        }
+
+        input {
+            height: 20px;
+            margin-top: 15px;
+        }
+
+        #zcb {
+            width: 50px;
+            height: 40px;
+            border-radius: 4px;
+            margin-left: 40px;
+            margin-top: 40px;
+            display: block;
+        }
+
+        .img {
+            margin-bottom: 20px;
+        }
+
+        .hint {
+            font-size: 14px;
+            color: #aaa;
+            /* margin-left: 18%; */
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="info">
+        <h3 class="Zhuce">注册</h3>
+        <div class="left">
+            <span>账号:</span>
+            <span>用户名:</span>
+            <span>密码:</span>
+            <span>电话号码:</span>
+            <span>邮箱:</span>
+            <span>头像:</span>
+        </div>
+        <div class="right">
+            <input type="text" name="accountnumber" id="accountnumber" value=""><br>
+            <input type="text" name="username" id="username" value=""><br>
+            <input type="text" name="password" id="password" value=""><br>
+            <input type="text" name="tel" id="tel" value=""><span class="hint"></span><br>
+            <!-- <p class="hint"></p> -->
+            <input type="text" name="mailbox" id="mailbox" value=""><br>
+            <input type="file" name="img" id="img" value=""><br>
+            <input type="button" value="注册" onclick="fn()" id="zcb">
+        </div><br>
+        <script>
+            var accountnumber = document.querySelector("#accountnumber")
+            var username = document.querySelector("#username")
+            var password = document.querySelector("#password")
+            var mailbox = document.querySelector("#mailbox")
+            var tel = document.querySelector("#tel")
+            var img = document.querySelector("#img").files[0]
+            let hintP = document.querySelector(".hint");
+
+            tel.addEventListener("focus", function (event) {
+                console.log(11);
+                hintP.style.display = "block";
+                hintP.innerHTML = "请输入正确的手机号码";
+                hintP.className = "hint";
+            })
+            tel.addEventListener("blur", function (event) {
+                // // 失去焦点时,输入框中没有内容,那么不显示提示信息
+                if (event.target.value == "") {
+                    hintP.style.display = "none";
+                }
+                console.log("blur");
+            });
+            tel.addEventListener("change", function () {
+                console.log("change----", event.target.value);
+
+                let reg = /^1[3|4|5|7|8][0-9]{9}$/
+                hintP.style.display = "block";
+                if (reg.test(event.target.value)) {
+                    hintP.style.display = "none";
+                } else {
+                    // hintP.className = "common";
+                    hintP.innerHTML = "错误";
+                }
+            })
+        </script>
+        <script>
+           function fn(){
+            var accountnumber = document.querySelector("#accountnumber").value
+            var username = document.querySelector("#username").value
+            var password = document.querySelector("#password").value
+            var mailbox = document.querySelector("#mailbox").value
+            var tel = document.querySelector("#tel").value
+            var img = document.querySelector("#img").files[0]
+            var url="/registerxhc"
+				var data=new FormData()
+				data.append("accountnumber",accountnumber)
+				data.append("username",username)
+				data.append("password",password)
+				data.append("mailbox",mailbox)
+				data.append("tel",tel)
+                data.append("img",img)
+                // 发起请求
+				axios.post(url,data)
+				.then((res)=>{
+                    console.log(res)
+                    if(res.data.code==2001){
+						//跳到登录界面
+						window.location.href="http://192.168.2.219:7001/public/loginxhc.html"
+					}
+					else if(res.data.code==4001){
+						//给用户提示
+                        alert("账号已经存在")
+					}
+				})				
+           }
+        </script>
+    </div>
+</body>
+
+</html>

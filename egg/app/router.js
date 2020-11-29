@@ -21,7 +21,8 @@ module.exports = app => {
 
 
   //向海川-------------------------------------------------------------
-  // router.post("/registerxhc",controller.homexhc.registerxhc);
-  // router.get("/getVerifxhc", controller.homexhc.getVerifxhc);
-  // router.post('/loginxhc', controller.homexhc.loginxhc);
+  router.post("/registerxhc",controller.homexhc.registerxhc);
+  router.get("/getVerifxhc", controller.homexhc.getVerifxhc);
+  router.post('/loginxhc', controller.homexhc.loginxhc);
+  
 };
