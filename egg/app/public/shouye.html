@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://s1.pstatp.com/cdn/expire-1-M/axios/0.19.2/axios.js'></script>
     <title>首页</title>
     <style>
         * {
@@ -34,8 +35,9 @@
 
             justify-content: space-around;
             align-items: center;
-            width: 20%;
+            width: 400px;
             height: 50px;
+            background-color: brown;
         }
 
         .right-nav a {
@@ -95,6 +97,17 @@
             right: 15px;
             bottom: 150px;
         }
+        #user {
+            height: 40px;
+            width: 200px;
+            display: inline-block;
+           
+        }
+        .user  img{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
     </style>
 </head>
 
@@ -103,11 +116,13 @@
     <div class="nav">
         <img src="./img/06.png" alt="" id="img">
         <div class="right-nav">
-            <a href="#" id="login" onclick="enroll()">请登录</a>
+            <!-- <a href="#" id="login" onclick="enroll()">请登录</a> -->
+            <div class="user" id="user"></div>
             <a href="#" id="history">我的订单</a>
             <a href="#" id="messager" onclick="meslogin()">管理员登录</a>
         </div>
     </div>
+    
     <div class="searchbox">
         <input type="text" id="search"><span class="wsearch" onclick="wesearch()">搜索</span>
     </div>
@@ -131,6 +146,26 @@
     <div class="gotop">
         <button onclick="navtop()">回到顶部</button>
     </div>
+    <script>
+        window.onload = function () {
+            var userDiv=document.getElementById("user")
+            axios("/userinfo")
+            .then((res)=>{
+                console.log(res.data)
+                if(res.data.code==4006){ 
+                    userDiv.innerHTML="<a href='http://192.168.2.219:7001/public/loginxhc.html'>登录</a>"
+                }else if(res.data.code==2006){
+                    var youxiang=document.createElement("img")
+                    youxiang.src=res.data.data[0].img
+                    userDiv.appendChild(youxiang)
+
+                    var username=document.createElement("span")
+                    username.innerHTML=res.data.data[0].username
+                    userDiv.appendChild(username)
+                }
+            })
+        }
+    </script>
     <script>
         function enroll() {
             window.location.href = ""//登录跳转

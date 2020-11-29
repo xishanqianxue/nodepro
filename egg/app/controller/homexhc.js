@@ -54,6 +54,22 @@ async getVerifxhc(){
 	}
    
 }
+async userinfo() {
+    const { ctx } = this;
+    //取出缓存的信息
+    //如果有缓存==>登录过,就可以直接访问缓存的用户信息
+    //如果没有缓存==>没登录过,或者退出了登录,或者登录过期
+    if(this.ctx.session.accountnumber){
+        //去数据库中获取这个用户的信息并返回
+        var re=await this.ctx.service.homexhc.userinfo(this.ctx.session.accountnumber)
+        this.ctx.body={info:"获取用户信息成功",code:2006,data:re}
+    }
+    else{
+        //返回未登录的标识
+        this.ctx.body={info:"未登录",code:4006}
+    }
+   
+  }
 
 }
 module.exports = Controllerxhc;

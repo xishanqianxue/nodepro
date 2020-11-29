@@ -24,5 +24,6 @@ module.exports = app => {
   router.post("/registerxhc",controller.homexhc.registerxhc);
   router.get("/getVerifxhc", controller.homexhc.getVerifxhc);
   router.post('/loginxhc', controller.homexhc.loginxhc);
+  router.get('/userinfo', controller.homexhc.userinfo);
   
 };

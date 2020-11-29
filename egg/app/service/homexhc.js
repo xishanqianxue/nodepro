@@ -32,6 +32,12 @@ class HomeService extends Service {
         return re
 
     }
+    async userinfo(accountnumber) {
+        const sql=`select * from userinfo where accountnumber="${accountnumber}"`
+        const data = await this.app.mysql.query(sql);
+        return data;
+      }
+    
    
 }
 module.exports = HomeService;
