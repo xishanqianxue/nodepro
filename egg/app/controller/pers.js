@@ -5,10 +5,10 @@ class PersonalController extends Controller {
     async personal(){
       const{ ctx }=this;
       var re=await this.service.centre.personal(ctx.request.body)
-      console.log(ctx.request.body,11111);
-      if(re[0]){
+      console.log(11,re,22);
+      if(re){
         ctx.body={code:2002}
-      }else{
+      }else if(!re){
           ctx.body={code:4004}
       }
         

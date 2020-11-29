@@ -15,7 +15,7 @@ module.exports = app => {
   router.get("/search_onload",controller.search.onload);
   router.post("/search_duble",controller.search.duble);
   //张天豪--------------------------------------------------------------
-  // router.post("/personal",controller.personal.personal)
+  router.post("/personal",controller.pers.personal);
 
 
 

@@ -1,8 +1,8 @@
 const Service = require('egg').Service;
 class proService extends Service {
   async personal(arg) {
-    const sql = `UPDATE userinfo set(accountnumber,username,tel,maillbox,autograph,jianjie,jybj,lxqq)=(select  ${arg.accountnumber},${arg.username},${arg.tel},${arg.maillbox},${arg.autograph},${arg.jianjie},${arg.jybj},${arg.lxqq})`
-    const re = await this.app.mysql.body(sql);
+    const sql = `update user set accountnumber="${arg.accountnumber}",username="${arg.username}",tel=${arg.tel},maillbox="${arg.maillbox}",autograph="${arg.autograph}",jianjie="${arg.jianjie}",jybj="${arg.jybj}",lxqq="${arg.lxqq}" where accountnumber="${arg.accountnumber}";`
+    const re = await this.app.mysql.query(sql);
     return re;
   }
 }
