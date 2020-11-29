@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            text-decoration: none;
+        }
+
+        .nav {
+            position: relative;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            color: #777;
+            background-color: #ccc;
+        }
+
+        #img {
+            position: absolute;
+            left: 80px;
+            height: 45px;
+            cursor: pointer;
+        }
+
+        .right-nav {
+            float: right;
+            display: flex;
+
+            justify-content: space-around;
+            align-items: center;
+            width: 20%;
+            height: 50px;
+        }
+
+        .right-nav a {
+            color: #777;
+        }
+
+        .searchbox {
+            position: relative;
+            width: 600px;
+            top: 60px;
+            left: 30%;
+        }
+
+        #search {
+            padding-left: 15px;
+            width: 500px;
+            height: 50px;
+            outline: none;
+        }
+
+        .wsearch {
+            display: inline-block;
+            position: absolute;
+            border: 1px solid black;
+            border-left: none;
+            width: 100px;
+            height: 52px;
+            line-height: 50px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .goods {
+            position: relative;
+            top: 140px;
+            left: 5%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            border: 1px solid black;
+            width: 90%;
+            height: auto;
+            background-color: #ddd;
+        }
+
+        .items {
+            margin: 30px 0 0 35px;
+            width: 230px;
+            height: 300px;
+            border: 1px solid black;
+        }
+
+        .gotop {
+            position: fixed;
+            right: 15px;
+            bottom: 150px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="nav">
+        <img src="./img/06.png" alt="" id="img">
+        <div class="right-nav">
+            <a href="#" id="login" onclick="enroll()">请登录</a>
+            <a href="#" id="history">我的订单</a>
+            <a href="#" id="messager" onclick="meslogin()">管理员登录</a>
+        </div>
+    </div>
+    <div class="searchbox">
+        <input type="text" id="search"><span class="wsearch" onclick="wesearch()">搜索</span>
+    </div>
+    <div class="goods">
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+        <div class="items"></div>
+    </div>
+    <div class="gotop">
+        <button onclick="navtop()">回到顶部</button>
+    </div>
+    <script>
+        function enroll() {
+            window.location.href = ""//登录跳转
+        }
+        function meslogin(){
+            window.location.href = "http://192.168.2.125:7001/public/messager.html"
+        }//管理员跳转
+        function wesearch() {
+            var goodsName = search.value;
+            if (!goodsName) {
+                alert("请输入搜索内容！")
+                return
+            }
+
+            main.innerHTML = null;
+            axios.get(`/search_search?goodsName=${goodsName}`)
+                .then((res) => {
+                    if (res.data.code == 2003) {
+                        console.log(res.data.re);
+                        let num = res.data.re.length;
+                        console.log(num);
+                        for (let i = 0; i < num; i++) {
+                            let items = document.createElement("div");
+                            items.className = "items";
+
+                            let img = document.createElement("img");
+                            img.className = "itemsimg";
+                            img.src = res.data.re[i].goodsImg;
+                            items.appendChild(img);
+
+                            let price = document.createElement("p");
+                            price.className = "price";
+                            price.innerHTML = res.data.re[i].goodsPrice;
+                            items.appendChild(price);
+
+                            let name = document.createElement("a");
+                            name.className = "itemsname";
+                            name.href = "#";
+                            name.innerHTML = `【${res.data.re[i].goodsName}】`
+                            items.appendChild(name);
+
+                            main.appendChild(items);
+                        }
+
+                    }
+                    else if (res.data.code == 4003) {
+                        main.innerHTML = null;
+                        let error1 = document.createElement("h1");
+                        error1.className = "error1";
+                        error1.innerHTML = "没有找到相关结果"
+                        main.appendChild(error1);
+                    }
+
+                })
+        }
+        function navtop() {
+            window.scrollTo(0, 100);
+        }
+    </script>
+</body>
+
+</html>
