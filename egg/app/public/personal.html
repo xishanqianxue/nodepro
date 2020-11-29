@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
+
+    <title>个人中心</title>
+</head>
+
+
+<style>
+*{
+    padding: 0;
+    margin: 0;
+    
+}
+    .nav{
+        
+        width: 100%;
+        height: 40px;
+        background-color: brown;
+        position: absolute;
+        }
+      
+
+    .geren {
+        width: auto;
+        height: auto;
+        position: absolute;
+        top: 150px;
+        padding: 40px;
+        left: 40%;
+        font-size: 20px;
+        background-color: brown;
+    }
+   
+    span{
+        padding-right: 100px;
+    }
+
+</style>
+
+<body>
+    <div class="nav"></div>
+    <div class="geren">
+        <span>账号</span><input type="text" id="accountnumber">
+        <span>用户名 </span> <input type="text" name="username" id="username" placeholder="4到16位（字母，数字，下划线，减号）">
+        <p id="tips"></p>
+        <br>
+        <span>手机号</span> <input type="tel" name="tel" id="tel">
+        <p id="tips1"></p>
+        <br>
+        <span>邮箱 </span><input type="email" name="email" id="email">
+        <p id="tips2"></p>
+        <br>
+        <span>签名</span><input type="text" name="autograph" id="autograph"><br>
+        <span>简介</span><input type="text" name="jianjie" id="jianjie" maxlength="20" style="width: 200px;height: 60px; padding-top: 20px;" placeholder="限制为20个字符"><br>
+        <span>教育背景</span><br>
+        <input type="text" placeholder="请填写学校" name="jybj" id="jybj" placeholder="请填写学校名称"><br>
+        <span>联系方式</span><br>
+        <input type="text" placeholder="请输入你的QQ号码" id="lxqq" placeholder="请输入你的qq号">
+        <br>
+
+        <button class="baocun" onclick="fn()" style="height: 30px;width: 60px;">保存</button>
+    </div>
+    <script>
+        function fn() {
+            var accountnumber=document.querySelector("#accountnumber").value
+            var username = document.querySelector("#username").value
+            var tips = document.querySelector("#tips")
+            var tel = document.querySelector("#tel").value
+            var tips1 = document.querySelector("#tips1")
+            var maillbox = document.querySelector("#email").value
+            var tips2 = document.querySelector("#tips2")
+            var autograph = document.querySelector("#autograph").value
+            var jianjie = document.querySelector("#jianjie").value
+            var jybj = document.querySelector("#jybj").value
+            var lxqq = document.querySelector("#lxqq").value
+
+            //检查格式
+            // var name = /^[a-zA-Z0-9_-]{4,16}$/
+            // if (!name.test(username)) {
+            //     tips.innerHTML = "请检查你的id格式";
+            //     return
+            // }
+            // var te = /^(13[0-9]|14[01456879]|15[0-3,5-9]|16[2567]|17[0-8]|18[0-9]|19[0-3,5-9])\d{8}$/
+            // if (!te.test(tel)) {
+            //     tips1.innerHTML = "请检查你的手机号码格式";
+            //     return
+            // }
+
+            // var ema = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/
+            // if (!ema.test(maillbox)) {
+            //     tips2.innerHTML = "请检查你的邮箱格式";
+            //     return
+            // }
+            var url = "/personal"
+            var data = new FormData
+            data.append("accountnumber",accountnumber)
+            data.append("username", username)
+            data.append("tel", tel)
+            data.append("maillbox", maillbox)
+            data.append("autograph", autograph)
+            data.append("jianjie", jianjie)
+            data.append("jybj", jybj)
+            data.append("lxqq", lxqq)
+            axios.post(url,data)
+                .then((res) => {
+                    if(res.data.code==2002){
+                           alert('已更新')
+                    }
+                })
+              
+
+        }
+    </script>
+</body>
+
+</html>
