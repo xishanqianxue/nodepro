@@ -158,24 +158,25 @@
         <div id="kind" class="jiansuot">
             <span class="jiansuom">种类:</span>
             <span class="jiansuo1">全部</span>
-            <span class="jiansuo1">古典名著</span>
-            <span class="jiansuo1">流行小说</span>
-            <span class="jiansuo1">其他</span>
+            <span class="jiansuo1 jiansuo2">古典名著</span>
+            <span class="jiansuo1 jiansuo2">流行小说</span>
+            <span class="jiansuo1 jiansuo2">其他</span>
         </div>
         <div id="isdone" class="jiansuot">
             <span class="jiansuom">连载状态:</span>
             <span class="jiansuo1">全部</span>
-            <span class="jiansuo1">完结</span>
-            <span class="jiansuo1">连载</span>
+            <span class="jiansuo1 jiansuo2">完结</span>
+            <span class="jiansuo1 jiansuo2">连载</span>
         </div> 
         <div id="isfree" class="jiansuot">
             <span class="jiansuom">收费:</span>
             <span class="jiansuo1">全部</span>
-            <span class="jiansuo1">免费</span>
-            <span class="jiansuo1">收费</span>
-            <span class="jiansuo1">会员</span>
+            <span class="jiansuo1 jiansuo2">免费</span>
+            <span class="jiansuo1 jiansuo2">收费</span>
+            <span class="jiansuo1 jiansuo2">会员</span>
         </div>
     </div>
+<<<<<<< HEAD
     <div class="main">
         <div class="items"></div>
         <div class="items"></div>
@@ -189,14 +190,80 @@
         <div class="items"></div>
     </div>
    
+=======
+    <div class="main"></div>
+>>>>>>> 57a7873cca066b28198c0692efd12ebb7d98f914
     <script>
-        var leibie = [,,];
+        var search = document.getElementById("search");
+        var main = document.querySelector(".main");
+        var jiansuo2 = document.querySelectorAll(".jiansuo2");
+        jiansuo2.forEach((el)=>{
+            el.onclick = function(){
+                main.innerHTML = null;
+                let formdata = new FormData();
+                formdata.append("word1",el.innerHTML);
+                formdata.append("word2",search.value);
+                axios.post("/search_duble",formdata)
+                .then((res)=>{
+                var m = res.data.re.length;
+                for(let i=0;i<m;i++){
+                    let items= document.createElement("div");
+                        items.className = "items";
+
+                        let img = document.createElement("img");
+                        img.className = "itemsimg";
+                        img.src = res.data.re[i].goodsImg;
+                        items.appendChild(img);
+
+                        let price = document.createElement("p");
+                        price.className = "price";
+                        price.innerHTML = res.data.re[i].goodsPrice;
+                        items.appendChild(price);
+
+                        let name = document.createElement("a");
+                        name.className = "itemsname";
+                        name.href = "#";
+                        name.innerHTML = `【${res.data.re[i].goodsName}】`
+                        items.appendChild(name);
+
+                        main.appendChild(items);
+                }
+                })
+            }
+        })
+        window.onload = function(){
+            axios.get("/search_onload")
+            .then((res)=>{
+                var m = res.data.re.length;
+                for(let i=0;i<m;i++){
+                    let items= document.createElement("div");
+                        items.className = "items";
+
+                        let img = document.createElement("img");
+                        img.className = "itemsimg";
+                        img.src = res.data.re[i].goodsImg;
+                        items.appendChild(img);
+
+                        let price = document.createElement("p");
+                        price.className = "price";
+                        price.innerHTML = res.data.re[i].goodsPrice;
+                        items.appendChild(price);
+
+                        let name = document.createElement("a");
+                        name.className = "itemsname";
+                        name.href = "#";
+                        name.innerHTML = `【${res.data.re[i].goodsName}】`
+                        items.appendChild(name);
+
+                        main.appendChild(items);
+                }
+            })
+        }
+
         function meslogin(){
             window.location.href = "http://192.168.2.125:7001/public/messager.html"
         }
         function wesearch(){
-            var search = document.getElementById("search");
-            var main = document.querySelector(".main");
             var goodsName = search.value;
             if(!goodsName){
                 alert("请输入搜索内容！")
@@ -242,6 +309,46 @@
                     main.appendChild(error1);
                 }
                 
+            })
+        }
+        function search_gudian(){
+            let formdata = new FormData();
+            formdata.append("word1","古典名著");
+            axios.post("/search_gudian",{"arr":arr})
+            .then(()=>{
+                if(code==2001){
+                    console.log(res.data.re);
+                    let num = res.data.re.length;
+                    console.log(num);
+                    for(let i=0;i<num;i++){
+                        let items= document.createElement("div");
+                        items.className = "items";
+
+                        let img = document.createElement("img");
+                        img.className = "itemsimg";
+                        img.src = res.data.re[i].goodsImg;
+                        items.appendChild(img);
+
+                        let price = document.createElement("p");
+                        price.className = "price";
+                        price.innerHTML = res.data.re[i].goodsPrice;
+                        items.appendChild(price);
+
+                        let name = document.createElement("a");
+                        name.className = "itemsname";
+                        name.href = "#";
+                        name.innerHTML = `【${res.data.re[i].goodsName}】`
+                        items.appendChild(name);
+
+                        main.appendChild(items);
+                    }
+                }else if(code==4003){
+                    main.innerHTML = null;
+                    let error1 = document.createElement("h1");
+                    error1.className="error1";
+                    error1.innerHTML = "没有找到相关结果"
+                    main.appendChild(error1);
+                }
             })
         }
     </script>

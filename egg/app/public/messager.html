@@ -104,7 +104,11 @@
         var add = document.getElementById("add");
         var open = document.getElementById("open");
         var zhebi = document.querySelector(".zhebi");
-
+        // window.onload = function(){
+        //     if(window.localStorage.getItem("session")){
+        //         zhebi.style.display = "none";
+        //     }
+        // }
         function login(){
             var username = document.getElementById("username").value;
             var pwd = document.getElementById("pwd").value;
@@ -116,6 +120,7 @@
             axios.post("/mes_login",formdata)
             .then((res)=>{
                 if(res.data.code==2001){
+                    window.localStorage.setItem("session","wwww")
                     zhebi.style.display = "none";
                 }else if(res.data.code==4003){
                     alert("用户名或密码错误！")
