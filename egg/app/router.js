@@ -12,7 +12,8 @@ module.exports = app => {
   router.get("/mes_search",controller.mes.search);
   router.post("/mes_change",controller.mes.change);
   router.get("/search_search",controller.search.search);
-
+  router.get("/search_onload",controller.search.onload);
+  router.post("/search_duble",controller.search.duble);
   //张天豪--------------------------------------------------------------
   // router.post("/personal",controller.personal.personal)
 

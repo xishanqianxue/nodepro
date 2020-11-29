@@ -1,8 +1,10 @@
 'use strict';
 const Controller = require('egg').Controller;
 class MesController extends Controller {
-  async login() {
+    async login() {
     const { ctx } = this;
+    this.ctx.session.username = ctx.request.body.username;
+    this.ctx.session.pwd = ctx.request.body.pwd;
     var re = await this.service.mes.login(ctx.request.body) ;
     if(re[0]){
         ctx.body = {code:2001};
@@ -10,7 +12,7 @@ class MesController extends Controller {
         ctx.body = {code:4003};
     }
   }
-  async add() {
+    async add() {
     const { ctx } = this;
     var re = await this.service.mes.search(ctx.request.body) ;
     if(!re[0]){
@@ -20,7 +22,7 @@ class MesController extends Controller {
         ctx.body = {code:4002};
     }
   }
-  async del() {
+    async del() {
     const { ctx } = this;
     var re = await this.service.mes.search(ctx.request.query) ;
     if(re[0]){
@@ -30,7 +32,7 @@ class MesController extends Controller {
         ctx.body = {code:4003}
     }
   }
-  async search() {
+    async search() {
     const { ctx } = this;
     var re = await this.service.mes.search(ctx.request.query) ;
     if(re[0]){
@@ -43,7 +45,7 @@ class MesController extends Controller {
     }
     
   }
-  async open() {
+    async open() {
     const { ctx } = this;
     var re = await this.service.mes.login(ctx.request.body);
     if(re[0]){
@@ -52,7 +54,7 @@ class MesController extends Controller {
         ctx.body = {code:4003};
     }
   }
-  async change(){
+    async change(){
       const{ ctx } = this;
       var re = await this.service.mes.search(ctx.request.body);
       if(re[0]){

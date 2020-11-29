@@ -11,7 +11,7 @@ class MesService extends Service {
   return data;
 }
     async add(arg) {
-    const sql=`insert into books(goodsName,goodsKind,goodsPrice,goodsID,goodsDesc) values("${arg.goodsName}","${arg.goodsKind}","${arg.goodsPrice}","${arg.goodsID}","${arg.goodsDesc}")`
+    const sql=`insert into books(goodsName,goodsKind,goodsPrice,goodsID,goodsDesc) values("${arg.goodsName}","${arg.goodsKind}","${arg.goodsPrice}","${arg.goodsID}","[${arg.goodsKind}]${arg.goodsDesc}")`
     await this.app.mysql.query(sql);
     }
     async del(arg) {
